@@ -1,9 +1,9 @@
 extends Node2D
 
 const NUM_STARS := 512
-const MIN_STAR_SIZE := 1.0 / sqrt(PI)
+const MIN_STAR_SIZE := 0.75
 const MAX_STAR_SIZE := 2.0
-const MIN_STAR_DEPTH := 1.0
+const MIN_STAR_DEPTH := 5.0
 const MAX_STAR_DEPTH := 15.0
 var stars = []
 var gradient: Gradient = Gradient.new()
@@ -43,4 +43,6 @@ func _draw():
 		var depth = star.depth
 		var sizelerp = (depth - MIN_STAR_DEPTH) / (MAX_STAR_DEPTH - MIN_STAR_DEPTH)
 		var size = lerp(MIN_STAR_SIZE, MAX_STAR_SIZE, 1.0-sizelerp)
-		draw_circle(Vector2(x, y) - rect.position, size, star.color)
+		var col = Color.white
+		col.a = sqrt(1.0-sizelerp)
+		draw_circle(Vector2(x, y) - rect.position, size, col)
