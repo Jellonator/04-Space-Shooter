@@ -3,7 +3,7 @@ extends KinematicBody2D
 const FRICTION := 400
 const ACCELERATION := 400
 const MAX_SPEED := 800
-const SHOTS_PER_SECOND := 10.0
+const SHOTS_PER_SECOND := 8.0
 
 enum ControlType {MOUSE, KEYBOARD}
 
