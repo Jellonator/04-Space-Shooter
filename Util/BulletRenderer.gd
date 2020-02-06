@@ -45,7 +45,7 @@ func _process(delta):
 			i = i + 1
 
 func _draw():
-	var tx := get_viewport_transform()
+	var tx := get_viewport().canvas_transform
 	var offset = tx.xform(Vector2(0, 0))
 	var fps := str(Engine.get_frames_per_second())
 	draw_string(font, -offset + Vector2(0, font.get_height()), fps, Color.white)
