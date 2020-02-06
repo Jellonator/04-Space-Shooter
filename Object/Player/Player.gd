@@ -3,7 +3,7 @@ extends KinematicBody2D
 const FRICTION := 400
 const ACCELERATION := 400
 const MAX_SPEED := 800
-const SHOTS_PER_SECOND := 8.0
+const SHOTS_PER_SECOND := 10.0
 
 enum ControlType {MOUSE, KEYBOARD}
 
@@ -43,10 +43,11 @@ func _physics_process(delta):
 		shot_timer -= delta * SHOTS_PER_SECOND
 		while shot_timer <= 0.0:
 			shot_timer += 1.0
-			var shoot_from := shoot_locations[shoot_i].global_position as Vector2
+			var shootparent = shoot_locations[shoot_i]
+			var shoot_from := shootparent.global_position as Vector2
 			shoot_i = (shoot_i + 1) % shoot_locations.size()
 			var shot_direction := Vector2(1, 0).rotated(self.global_rotation)
 			var shot_target := shoot_from + shot_direction * 10000
-			brender.add_bullet(shoot_from, shot_target)
+			brender.add_bullet(shoot_from, shot_target, shootparent)
 	else:
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
