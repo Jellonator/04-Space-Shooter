@@ -3,7 +3,7 @@ extends KinematicBody2D
 const FRICTION := 400
 const ACCELERATION := 400
 const MAX_SPEED := 800
-const SHOTS_PER_SECOND := 10.0
+const SHOTS_PER_SECOND := 6.0
 
 enum ControlType {MOUSE, KEYBOARD}
 
@@ -11,11 +11,11 @@ onready var node_front := $FrontPos
 onready var node_left := $LeftPos
 onready var node_right := $RightPos
 
-var look_type = ControlType.KEYBOARD
+var look_type = ControlType.MOUSE
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
 var shoot_i = 0
-onready var shoot_locations = [node_left, node_right]
+onready var shoot_locations = [node_front]
 
 func _physics_process(delta):
 	var ivector := Vector2(0, 0)

@@ -1,7 +1,7 @@
 shader_type particles;
+render_mode keep_data;
 
 uniform vec2 offset;
-uniform bool do_restart;
 
 float rand_from_seed(inout uint seed) {
 	int k;
