@@ -3,7 +3,7 @@
 [ext_resource path="res://Util/StarRenderer.gd" type="Script" id=1]
 [ext_resource path="res://Util/StarRenderer.shader" type="Shader" id=2]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 shader_param/offset = Vector2( 1, 0 )
 shader_param/do_restart = null
@@ -24,4 +24,4 @@ scale = Vector2( 10, 1 )
 amount = 4096
 lifetime = 0.01
 visibility_rect = Rect2( 0, 0, 1024, 600 )
-process_material = SubResource( 2 )
+process_material = SubResource( 1 )

@@ -48,6 +48,7 @@ func _draw():
 	var tx := get_viewport().canvas_transform
 	var offset = tx.xform(Vector2(0, 0))
 	var fps := str(Engine.get_frames_per_second())
+	draw_rect(Rect2(-offset, Vector2(24, 16)), Color.black)
 	draw_string(font, -offset + Vector2(0, font.get_height()), fps, Color.white)
 	for bullet in bullets:
 		var frompos = bullet.frompos
