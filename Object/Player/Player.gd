@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 const FRICTION := 400
-const ACCELERATION := 400
+const ACCELERATION := 1600
 const MAX_SPEED := 800
 const SHOTS_PER_SECOND := 6.0
 
@@ -28,7 +28,7 @@ func _physics_process(delta):
 	if vdiff.length() < ACCELERATION * delta:
 		velocity = target_velocity
 	else:
-		velocity += vdiff * delta
+		velocity += vdiff.normalized() * delta * ACCELERATION
 	velocity = move_and_slide(velocity)
 	if look_type == ControlType.KEYBOARD:
 		var lookvector := Vector2(0, 0)
