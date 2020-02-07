@@ -9,6 +9,8 @@ const float MAX_PARTICLE_SIZE = 3.0;
 const float MIN_PARTICLE_SIZE = 1.0;
 const float MIN_DEPTH = 1.0;
 const float MAX_DEPTH = 20.0;
+const int SHOOTING_STAR_RARITY = 32;
+const float MAX_SHOOTING_STAR_SPEED = 25.0;
 
 float rand_from_seed(inout uint seed) {
 	int k;
@@ -21,10 +23,6 @@ float rand_from_seed(inout uint seed) {
 		s += 2147483647;
 	seed = uint(s);
 	return float(seed % uint(65536)) / 65535.0;
-}
-
-float rand_from_seed_m1_p1(inout uint seed) {
-	return rand_from_seed(seed) * 2.0 - 1.0;
 }
 
 uint hash(uint x) {
@@ -41,6 +39,13 @@ void vertex() {
 		CUSTOM.z = sqrt(rand_from_seed(alt_seed)) * (MAX_DEPTH - MIN_DEPTH) + MIN_DEPTH;
 		CUSTOM.x = rand_from_seed(alt_seed) * (SCREEN_SIZE.x + 2.0 * PADDING.x) * CUSTOM.z;
 		CUSTOM.y = rand_from_seed(alt_seed) * (SCREEN_SIZE.y + 2.0 * PADDING.y) * CUSTOM.z;
+		float angle = rand_from_seed(alt_seed) * 2.0 * 3.1415926535;
+		float speed = rand_from_seed(alt_seed) * MAX_SHOOTING_STAR_SPEED;
+		VELOCITY.x = cos(angle) * speed;
+		VELOCITY.y = sin(angle) * speed;
+	}
+	if (INDEX % SHOOTING_STAR_RARITY == 0) {
+		CUSTOM.xy += VELOCITY.xy * DELTA;
 	}
 	COLOR = vec4(1, 1, 1, 0.85);
 	float sizelerp = (CUSTOM.z - MIN_DEPTH) / (MAX_DEPTH - MIN_DEPTH);
