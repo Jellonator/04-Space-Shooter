@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Object/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Util/BulletRenderer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Util/StarRenderer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Object/Enemy/EyeEnemy.tscn" type="PackedScene" id=4]
 
 [node name="Game" type="Node2D"]
 
@@ -12,3 +13,6 @@ position = Vector2( 286.999, 188.815 )
 [node name="BulletRenderer" parent="." instance=ExtResource( 2 )]
 
 [node name="StarRenderer" parent="." instance=ExtResource( 3 )]
+
+[node name="EyeEnemy" parent="." instance=ExtResource( 4 )]
+position = Vector2( 384, 192 )
