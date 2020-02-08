@@ -48,6 +48,14 @@ func _physics_process(delta):
 			shoot_i = (shoot_i + 1) % shoot_locations.size()
 			var shot_direction := Vector2(1, 0).rotated(self.global_rotation)
 			var shot_target := shoot_from + shot_direction * 10000
+			var space := get_world_2d().direct_space_state
+			var enemylayer := 0b101
+			var result := space.intersect_ray(shoot_from, shot_target, [self], enemylayer)
+			if not result.empty():
+				var collider = result.collider
+				if collider.has_method("do_damage"):
+					collider.do_damage(1)
+				shot_target = result.position + shot_direction * 10
 			brender.add_bullet(shoot_from, shot_target, shootparent)
 	else:
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
