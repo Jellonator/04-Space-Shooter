@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
 const FRICTION := 400
-const ACCELERATION := 1600
-const MAX_SPEED := 800
+const ACCELERATION := 800
+const MAX_SPEED := 500
 const SHOTS_PER_SECOND := 6.0
 
 enum ControlType {MOUSE, KEYBOARD}
@@ -29,7 +29,6 @@ func _physics_process(delta):
 		velocity = target_velocity
 	else:
 		velocity += vdiff.normalized() * delta * ACCELERATION
-	velocity = move_and_slide(velocity)
 	if look_type == ControlType.KEYBOARD:
 		var lookvector := Vector2(0, 0)
 		lookvector.x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
@@ -38,6 +37,7 @@ func _physics_process(delta):
 			self.rotation = lerp_angle(self.rotation, lookvector.angle(), delta * 10)
 	else:
 		look_at(get_global_mouse_position())
+	velocity = move_and_slide(velocity)
 	var brender = get_tree().get_nodes_in_group("bullet_renderer")[0]
 	if Input.is_action_pressed("action_shoot"):
 		shot_timer -= delta * SHOTS_PER_SECOND

@@ -54,4 +54,4 @@ func _draw():
 		var frompos = bullet.frompos
 		if bullet.parent != null:
 			frompos = bullet.parent.global_position
-		draw_line(frompos, bullet.topos, gradient.interpolate(bullet.life), 3, false)
+		draw_line(frompos, bullet.topos, gradient.interpolate(bullet.life), 5, false)
