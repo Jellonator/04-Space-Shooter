@@ -5,13 +5,10 @@ const ACCELERATION := 800
 const MAX_SPEED := 500
 const SHOTS_PER_SECOND := 6.0
 
-enum ControlType {MOUSE, KEYBOARD}
-
 onready var node_front := $FrontPos
 onready var node_left := $LeftPos
 onready var node_right := $RightPos
 
-var look_type = ControlType.MOUSE
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
 var shoot_i = 0
@@ -29,17 +26,20 @@ func _physics_process(delta):
 		velocity = target_velocity
 	else:
 		velocity += vdiff.normalized() * delta * ACCELERATION
-	if look_type == ControlType.KEYBOARD:
+	var do_shoot := false
+	if GameConfig.get_config_value("mouse_enabled"):
+		look_at(get_global_mouse_position())
+		do_shoot = Input.is_action_pressed("action_shoot_mouse")
+	else:
 		var lookvector := Vector2(0, 0)
 		lookvector.x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 		lookvector.y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 		if lookvector.length_squared() > 1e-2:
 			self.rotation = lerp_angle(self.rotation, lookvector.angle(), delta * 10)
-	else:
-		look_at(get_global_mouse_position())
+		do_shoot = Input.is_action_pressed("action_shoot_nonmouse")
 	velocity = move_and_slide(velocity)
 	var brender = get_tree().get_nodes_in_group("bullet_renderer")[0]
-	if Input.is_action_pressed("action_shoot"):
+	if do_shoot:
 		shot_timer -= delta * SHOTS_PER_SECOND
 		while shot_timer <= 0.0:
 			shot_timer += 1.0

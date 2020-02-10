@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Gui/RebindKey.gd" type="Script" id=1]
+
+[node name="RebindKey" type="HBoxContainer"]
+anchor_right = 1.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_top = 3.0
+margin_right = 478.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "Empty"
+align = 2
+
+[node name="Change" type="Button" parent="."]
+margin_left = 482.0
+margin_right = 960.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+keep_pressed_outside = true
+text = "Change Key"
+[connection signal="pressed" from="Change" to="." method="_on_Change_pressed"]

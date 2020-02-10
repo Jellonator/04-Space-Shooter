@@ -1,0 +1,116 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Gui/GameConfig.gd" type="Script" id=1]
+[ext_resource path="res://Gui/RebindKey.tscn" type="PackedScene" id=2]
+
+[node name="GameConfig" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputsBase" type="GridContainer" parent="VBoxContainer"]
+margin_right = 960.0
+margin_bottom = 116.0
+
+[node name="Up" parent="VBoxContainer/InputsBase" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_right = 960.0
+input_name = "move_up"
+
+[node name="Left" parent="VBoxContainer/InputsBase" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 24.0
+margin_right = 960.0
+margin_bottom = 44.0
+input_name = "move_left"
+
+[node name="Down" parent="VBoxContainer/InputsBase" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 48.0
+margin_right = 960.0
+margin_bottom = 68.0
+input_name = "move_down"
+
+[node name="Right" parent="VBoxContainer/InputsBase" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 72.0
+margin_right = 960.0
+margin_bottom = 92.0
+input_name = "move_right"
+
+[node name="Pause" parent="VBoxContainer/InputsBase" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 96.0
+margin_right = 960.0
+margin_bottom = 116.0
+input_name = "game_pause"
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_top = 120.0
+margin_right = 960.0
+margin_bottom = 160.0
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/CenterContainer"]
+margin_left = 380.0
+margin_right = 579.0
+margin_bottom = 40.0
+text = "Enable Mouse Aim"
+
+[node name="InputsMouse" type="GridContainer" parent="VBoxContainer"]
+margin_top = 164.0
+margin_right = 960.0
+margin_bottom = 184.0
+
+[node name="Shoot" parent="VBoxContainer/InputsMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_right = 960.0
+input_name = "action_shoot_mouse"
+
+[node name="InputsNonMouse" type="GridContainer" parent="VBoxContainer"]
+margin_top = 188.0
+margin_right = 960.0
+margin_bottom = 304.0
+
+[node name="LookUp" parent="VBoxContainer/InputsNonMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_right = 960.0
+input_name = "look_up"
+
+[node name="LookLeft" parent="VBoxContainer/InputsNonMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 24.0
+margin_right = 960.0
+margin_bottom = 44.0
+input_name = "look_left"
+
+[node name="LookDown" parent="VBoxContainer/InputsNonMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 48.0
+margin_right = 960.0
+margin_bottom = 68.0
+input_name = "look_down"
+
+[node name="LookRight" parent="VBoxContainer/InputsNonMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 72.0
+margin_right = 960.0
+margin_bottom = 92.0
+input_name = "look_right"
+
+[node name="Shoot" parent="VBoxContainer/InputsNonMouse" instance=ExtResource( 2 )]
+anchor_right = 0.0
+margin_top = 96.0
+margin_right = 960.0
+margin_bottom = 116.0
+input_name = "action_shoot_nonmouse"
+[connection signal="toggled" from="VBoxContainer/CenterContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
