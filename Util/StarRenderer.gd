@@ -1,13 +1,5 @@
 extends Node2D
 
-const NUM_STARS := 512
-const MIN_STAR_SIZE := 1.15
-const MAX_STAR_SIZE := 2.0
-const MIN_STAR_DEPTH := 5.0
-const MAX_STAR_DEPTH := 15.0
-var stars = []
-var gradient: Gradient = Gradient.new()
-
 onready var node_particles := $ParallaxBackground/ParallaxLayer/Particles2D
 onready var shader_mat := node_particles.process_material as ShaderMaterial
 

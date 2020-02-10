@@ -17,13 +17,13 @@ script = ExtResource( 1 )
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 scale = Vector2( 0.1, 1 )
 motion_scale = Vector2( 0, 0 )
-motion_offset = Vector2( -512, -300 )
+motion_offset = Vector2( -480, -270 )
 
 [node name="Particles2D" type="Particles2D" parent="ParallaxBackground/ParallaxLayer"]
 scale = Vector2( 10, 1 )
 amount = 4096
 lifetime = 2.14748e+09
 explosiveness = 1.0
-visibility_rect = Rect2( 0, 0, 1024, 600 )
+visibility_rect = Rect2( 0, 0, 960, 540 )
 process_material = SubResource( 1 )
 texture = ExtResource( 3 )

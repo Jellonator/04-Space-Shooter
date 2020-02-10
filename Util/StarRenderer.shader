@@ -4,7 +4,7 @@ render_mode keep_data;
 uniform vec2 offset;
 
 const vec2 PADDING = vec2(4.0, 4.0);
-const vec2 SCREEN_SIZE = vec2(1024.0, 600.0);
+const vec2 SCREEN_SIZE = vec2(960.0, 540.0);
 const float MAX_PARTICLE_SIZE = 3.0;
 const float MIN_PARTICLE_SIZE = 1.0;
 const float MIN_DEPTH = 1.0;

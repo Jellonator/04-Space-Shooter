@@ -15,7 +15,7 @@ var look_type = ControlType.MOUSE
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
 var shoot_i = 0
-onready var shoot_locations = [node_front]
+onready var shoot_locations = [node_left, node_right]
 
 func _physics_process(delta):
 	var ivector := Vector2(0, 0)
