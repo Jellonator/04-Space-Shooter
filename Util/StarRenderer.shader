@@ -10,7 +10,7 @@ const float MIN_PARTICLE_SIZE = 1.0;
 const float MIN_DEPTH = 1.0;
 const float MAX_DEPTH = 20.0;
 const int SHOOTING_STAR_RARITY = 32;
-const float MAX_SHOOTING_STAR_SPEED = 25.0;
+const float MAX_SHOOTING_STAR_SPEED = 5.0;
 
 float rand_from_seed(inout uint seed) {
 	int k;
