@@ -1,7 +1,51 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Object/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Object/Player/PurpleFlame.png" type="Texture" id=2]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.344512, 0.734756, 1 )
+colors = PoolColorArray( 0.803337, 0.18148, 0.860352, 1, 0.65899, 0.0852814, 0.949219, 1, 0.309971, 0.0695967, 0.492115, 1, 0.243137, 0.0666667, 0.407843, 0 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0.002849, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.336182, 0.922727 ), -0.965669, -0.965669, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 1
+emission_sphere_radius = 1.0
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 25.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 64.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 50.0
+scale = 12.0
+scale_curve = SubResource( 3 )
+color_ramp = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+emission_shape = 2
+emission_box_extents = Vector3( 4, 1, 1 )
+flag_rotate_y = true
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 25.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 32.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 50.0
+scale = 6.0
+scale_curve = SubResource( 3 )
+color = Color( 1, 0.270588, 0.921569, 1 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -12,6 +56,7 @@ position = Vector2( 3, 0 )
 texture = ExtResource( 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
 polygon = PoolVector2Array( 35, 0, 27, -8, 15, -8, -8, -31, -12, -31, -12, -8, -23, -8, -23, 8, -12, 8, -12, 31, -8, 31, 15, 8, 27, 8 )
 
 [node name="FrontPos" type="Position2D" parent="."]
@@ -25,3 +70,21 @@ position = Vector2( -6, 22 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+
+[node name="Particles2D" type="Particles2D" parent="."]
+show_behind_parent = true
+position = Vector2( -33, 0 )
+amount = 128
+lifetime = 0.5
+local_coords = false
+draw_order = 1
+process_material = SubResource( 1 )
+
+[node name="Particles2D2" type="Particles2D" parent="."]
+show_behind_parent = true
+position = Vector2( -29, 0 )
+amount = 48
+lifetime = 0.1
+local_coords = false
+draw_order = 1
+process_material = SubResource( 6 )

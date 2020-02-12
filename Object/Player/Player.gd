@@ -8,6 +8,8 @@ const SHOTS_PER_SECOND := 6.0
 onready var node_front := $FrontPos
 onready var node_left := $LeftPos
 onready var node_right := $RightPos
+onready var node_smoke := $Particles2D
+onready var part_smoke := node_smoke.process_material as ParticlesMaterial
 
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
@@ -20,6 +22,10 @@ func _physics_process(delta):
 	ivector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	if ivector.length_squared() > 1:
 		ivector = ivector.normalized()
+	if ivector.length() > 1e-4:
+		node_smoke.emitting = true
+	else:
+		node_smoke.emitting = false
 	var target_velocity := MAX_SPEED * ivector
 	var vdiff := target_velocity - velocity
 	if vdiff.length() < ACCELERATION * delta:
