@@ -60,7 +60,9 @@ damping_random = 0.75
 scale_curve = SubResource( 4 )
 color_ramp = SubResource( 7 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"player",
+]]
 collision_layer = 2
 script = ExtResource( 1 )
 

@@ -12,14 +12,14 @@ func _ready():
 	health = max_health
 	smat = ShaderMaterial.new()
 	smat.shader = shader
-	for sprite in sprites:
-		get_node(sprite).material = smat
 	add_to_group("enemy", true)
 
 func is_dead():
 	return health <= 0
 
 func do_kill():
+	for sprite in sprites:
+		get_node(sprite).material = smat
 	collision_mask = 0
 	collision_layer = 0
 
@@ -45,3 +45,13 @@ func _physics_process(delta):
 			queue_free()
 		else:
 			smat.set_shader_param("death", death_timer)
+
+func get_nearest_player():
+	var ret = null
+	var dis = 0.0
+	for player in get_tree().get_nodes_in_group("player"):
+		var newdis = player.global_position.distance_to(global_position)
+		if ret == null or newdis < dis:
+			dis = newdis
+			ret = player
+	return ret

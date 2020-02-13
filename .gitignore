@@ -11,3 +11,4 @@ data_*/
 # Krita backups
 *.kra~
 *.png~
+*.kra-autosave.kra
