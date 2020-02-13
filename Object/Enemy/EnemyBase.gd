@@ -14,6 +14,7 @@ func _ready():
 	smat.shader = shader
 	for sprite in sprites:
 		get_node(sprite).material = smat
+	add_to_group("enemy", true)
 
 func is_dead():
 	return health <= 0

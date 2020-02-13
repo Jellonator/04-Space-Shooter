@@ -81,7 +81,9 @@ position = Vector2( -6, -22 )
 [node name="RightPos" type="Position2D" parent="."]
 position = Vector2( -6, 22 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." groups=[
+"camera",
+]]
 current = true
 
 [node name="PSmoke" type="Particles2D" parent="."]
