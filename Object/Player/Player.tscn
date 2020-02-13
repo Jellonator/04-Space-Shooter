@@ -5,55 +5,60 @@
 [ext_resource path="res://Object/Player/bigsmoke.png" type="Texture" id=3]
 [ext_resource path="res://Object/Player/lilsmoke.png" type="Texture" id=4]
 
-[sub_resource type="Gradient" id=4]
+[sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.344512, 0.734756, 1 )
 colors = PoolColorArray( 0.803337, 0.18148, 0.860352, 1, 0.65899, 0.0852814, 0.949219, 1, 0.309971, 0.0695967, 0.492115, 1, 0.243137, 0.0666667, 0.407843, 0 )
 
-[sub_resource type="GradientTexture" id=5]
-gradient = SubResource( 4 )
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
 
-[sub_resource type="Curve" id=2]
-_data = [ Vector2( 0.002849, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.51567, 0.647727 ), -2.05636, -2.05636, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0.002849, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.560886, 0.597727 ), -1.84773, -1.84773, 0, 0, Vector2( 0.98893, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=3]
-curve = SubResource( 2 )
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=1]
-emission_shape = 2
-emission_box_extents = Vector3( 1, 0, 0 )
-flag_align_y = true
+[sub_resource type="ParticlesMaterial" id=5]
 flag_disable_z = true
 direction = Vector3( -1, 0, 0 )
 spread = 0.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 64.0
+initial_velocity_random = 0.75
+angular_velocity = 900.0
+angular_velocity_random = 0.45
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 damping = 100.0
-scale_curve = SubResource( 3 )
-color_ramp = SubResource( 5 )
+damping_random = 0.5
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 2 )
 
-[sub_resource type="Gradient" id=7]
+[sub_resource type="Gradient" id=6]
 offsets = PoolRealArray( 0.731707, 1 )
 colors = PoolColorArray( 0.986328, 0.319786, 0.983724, 1, 0.788235, 0.0352941, 0.678431, 0 )
 
-[sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=6]
+[sub_resource type="ParticlesMaterial" id=8]
 trail_divisor = 8
 emission_shape = 1
-emission_sphere_radius = 1.0
-flag_align_y = true
+emission_sphere_radius = 2.0
 flag_disable_z = true
 direction = Vector3( -1, 0, 0 )
-spread = 25.0
+spread = 15.0
 gravity = Vector3( 0, 0, 0 )
+initial_velocity = 40.0
+initial_velocity_random = 0.75
+angular_velocity = 900.0
+angular_velocity_random = 0.9
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 damping = 50.0
-scale_curve = SubResource( 3 )
-color_ramp = SubResource( 8 )
+damping_random = 0.75
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 7 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -81,22 +86,22 @@ current = true
 
 [node name="PSmoke" type="Particles2D" parent="."]
 show_behind_parent = true
-position = Vector2( -31, 0 )
-amount = 512
+position = Vector2( -35, 0 )
+amount = 128
 lifetime = 0.5
 fixed_fps = 240
 local_coords = false
 draw_order = 1
-process_material = SubResource( 1 )
+process_material = SubResource( 5 )
 texture = ExtResource( 3 )
 
 [node name="PFlame" type="Particles2D" parent="."]
 show_behind_parent = true
-position = Vector2( -30, 0 )
-amount = 256
+position = Vector2( -32, 0 )
+amount = 64
 lifetime = 0.1
 preprocess = 1.0
 local_coords = false
 draw_order = 1
-process_material = SubResource( 6 )
+process_material = SubResource( 8 )
 texture = ExtResource( 4 )
