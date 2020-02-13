@@ -4,13 +4,14 @@ uniform float death = 1.0;
 
 // This psuedo-random function is credited to The Book of Shaders by 
 // Patricio Gonzalez Vivo & Jen Lowe.
+// Generates a float between 0 and 1.
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 void fragment() {
 	COLOR = texture(TEXTURE, UV);
-	COLOR.rgb = COLOR.rgb * death * death;
+	COLOR.rgb = mix(COLOR.rgb, vec3(1, 1, 1), 1.0-death);
 	if (death < 1.0) {
 		uint x = uint(floor(UV.x / TEXTURE_PIXEL_SIZE.x));
 		uint y = uint(floor(UV.y / TEXTURE_PIXEL_SIZE.y));
