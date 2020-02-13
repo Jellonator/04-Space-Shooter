@@ -67,7 +67,7 @@ func _physics_process(delta):
 			if not result.empty():
 				var collider = result.collider
 				if collider.has_method("do_damage"):
-					collider.do_damage(1)
+					collider.do_damage(1, shot_direction * 50)
 				shot_target = result.position + shot_direction * 10
 			brender.add_bullet(shoot_from, shot_target, shootparent)
 	else:
