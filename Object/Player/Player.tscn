@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Object/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Object/Player/PurpleFlame.png" type="Texture" id=2]
+[ext_resource path="res://Object/Player/bigsmoke.png" type="Texture" id=3]
+[ext_resource path="res://Object/Player/lilsmoke.png" type="Texture" id=4]
 
 [sub_resource type="Gradient" id=4]
 offsets = PoolRealArray( 0, 0.344512, 0.734756, 1 )
@@ -11,41 +13,47 @@ colors = PoolColorArray( 0.803337, 0.18148, 0.860352, 1, 0.65899, 0.0852814, 0.9
 gradient = SubResource( 4 )
 
 [sub_resource type="Curve" id=2]
-_data = [ Vector2( 0.002849, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.336182, 0.922727 ), -0.965669, -0.965669, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0.002849, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.51567, 0.647727 ), -2.05636, -2.05636, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=3]
 curve = SubResource( 2 )
 
 [sub_resource type="ParticlesMaterial" id=1]
-emission_shape = 1
-emission_sphere_radius = 1.0
+emission_shape = 2
+emission_box_extents = Vector3( 1, 0, 0 )
+flag_align_y = true
 flag_disable_z = true
 direction = Vector3( -1, 0, 0 )
-spread = 25.0
+spread = 0.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 64.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-damping = 50.0
-scale = 12.0
+damping = 100.0
 scale_curve = SubResource( 3 )
 color_ramp = SubResource( 5 )
 
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0.731707, 1 )
+colors = PoolColorArray( 0.986328, 0.319786, 0.983724, 1, 0.788235, 0.0352941, 0.678431, 0 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
 [sub_resource type="ParticlesMaterial" id=6]
-emission_shape = 2
-emission_box_extents = Vector3( 4, 1, 1 )
-flag_rotate_y = true
+trail_divisor = 8
+emission_shape = 1
+emission_sphere_radius = 1.0
+flag_align_y = true
 flag_disable_z = true
 direction = Vector3( -1, 0, 0 )
 spread = 25.0
 gravity = Vector3( 0, 0, 0 )
-initial_velocity = 32.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 damping = 50.0
-scale = 6.0
 scale_curve = SubResource( 3 )
-color = Color( 1, 0.270588, 0.921569, 1 )
+color_ramp = SubResource( 8 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -71,20 +79,24 @@ position = Vector2( -6, 22 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 
-[node name="Particles2D" type="Particles2D" parent="."]
+[node name="PSmoke" type="Particles2D" parent="."]
 show_behind_parent = true
-position = Vector2( -33, 0 )
-amount = 128
+position = Vector2( -31, 0 )
+amount = 512
 lifetime = 0.5
+fixed_fps = 240
 local_coords = false
 draw_order = 1
 process_material = SubResource( 1 )
+texture = ExtResource( 3 )
 
-[node name="Particles2D2" type="Particles2D" parent="."]
+[node name="PFlame" type="Particles2D" parent="."]
 show_behind_parent = true
-position = Vector2( -29, 0 )
-amount = 48
+position = Vector2( -30, 0 )
+amount = 256
 lifetime = 0.1
+preprocess = 1.0
 local_coords = false
 draw_order = 1
 process_material = SubResource( 6 )
+texture = ExtResource( 4 )

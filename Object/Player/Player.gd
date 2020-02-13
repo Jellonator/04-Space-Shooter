@@ -8,8 +8,12 @@ const SHOTS_PER_SECOND := 6.0
 onready var node_front := $FrontPos
 onready var node_left := $LeftPos
 onready var node_right := $RightPos
-onready var node_smoke := $Particles2D
+onready var node_smoke := $PSmoke as Particles2D
 onready var part_smoke := node_smoke.process_material as ParticlesMaterial
+onready var part_smoke_offset := node_smoke.position
+onready var node_fire := $PFlame as Particles2D
+onready var part_fire := node_fire.process_material as ParticlesMaterial
+onready var part_fire_offset := node_fire.position
 
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
@@ -22,7 +26,7 @@ func _physics_process(delta):
 	ivector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	if ivector.length_squared() > 1:
 		ivector = ivector.normalized()
-	if ivector.length() > 1e-4:
+	if ivector.length() > 1e-3:
 		node_smoke.emitting = true
 	else:
 		node_smoke.emitting = false
@@ -43,7 +47,25 @@ func _physics_process(delta):
 		if lookvector.length_squared() > 1e-2:
 			self.rotation = lerp_angle(self.rotation, lookvector.angle(), delta * 10)
 		do_shoot = Input.is_action_pressed("action_shoot_nonmouse")
+	var prev_pos := global_position
 	velocity = move_and_slide(velocity)
+	var post_pos := global_position
+	if prev_pos == post_pos:
+		part_smoke.emission_shape = ParticlesMaterial.EMISSION_SHAPE_POINT
+		node_smoke.position = part_smoke_offset
+		part_fire.emission_shape = ParticlesMaterial.EMISSION_SHAPE_POINT
+		node_fire.position = part_fire_offset
+	else:
+		part_smoke.emission_shape = ParticlesMaterial.EMISSION_SHAPE_BOX
+		part_smoke.emission_box_extents.x = prev_pos.distance_to(post_pos)
+		node_smoke.global_position = global_transform.xform(part_smoke_offset) +\
+			(prev_pos + post_pos) / 2 - global_position
+		node_smoke.global_rotation = (post_pos - prev_pos).angle()
+		part_fire.emission_shape = ParticlesMaterial.EMISSION_SHAPE_BOX
+		part_fire.emission_box_extents.x = prev_pos.distance_to(post_pos)
+		node_fire.global_position = global_transform.xform(part_fire_offset) +\
+			(prev_pos + post_pos) / 2 - global_position
+		node_fire.global_rotation = (post_pos - prev_pos).angle()
 	var brender = get_tree().get_nodes_in_group("bullet_renderer")[0]
 	if do_shoot:
 		shot_timer -= delta * SHOTS_PER_SECOND
