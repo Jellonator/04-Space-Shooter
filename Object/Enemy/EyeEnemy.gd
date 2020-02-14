@@ -22,13 +22,11 @@ func _physics_process(delta):
 	var player = get_nearest_player()
 	if player == null:
 		node_socket.position = Vector2(0, 0)
-#		node_eye.position = Vector2(0, 0)
 		eye_mat.set_shader_param("offset", Vector2(0, 0))
 		shoot_time = 1.0
 	else:
 		var diff = player.global_position - global_position
 		node_socket.position = (LOOK_LEN * diff.normalized()).round()
-#		node_eye.position = EYE_LEN * diff.normalized()
 		eye_mat.set_shader_param("offset", -(diff.normalized() * EYE_LEN).round())
 		shoot_time -= delta * SHOOT_RATE
 		if shoot_time < 0:

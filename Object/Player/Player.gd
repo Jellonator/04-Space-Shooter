@@ -1,14 +1,19 @@
 extends KinematicBody2D
 
-const FRICTION := 400
-const ACCELERATION := 800
-const MAX_SPEED := 500
+const FRICTION := 400.0
+const ACCELERATION := 800.0
+const MAX_SPEED := 500.0
 const SHOTS_PER_SECOND := 6.0
+const INV_MAX := 0.5
+const scene_health := preload("res://Object/Player/HealthNode.tscn")
+const scene_kill := preload("res://Object/Player/Kill.tscn")
 
+onready var node_sprite := $Sprite
 onready var node_front := $FrontPos
 onready var node_left := $LeftPos
 onready var node_right := $RightPos
 onready var node_smoke := $PSmoke as Particles2D
+onready var node_gui := $Gui
 onready var part_smoke := node_smoke.process_material as ParticlesMaterial
 onready var part_smoke_offset := node_smoke.position
 onready var node_fire := $PFlame as Particles2D
@@ -17,10 +22,27 @@ onready var part_fire_offset := node_fire.position
 
 var shot_timer := 0.0
 var velocity := Vector2(0, 0)
-var shoot_i = 0
+var invincibility := 0.0
+var shoot_i := 0
 onready var shoot_locations = [node_left, node_right]
+var max_health := 3
+var health := max_health
+onready var health_nodes := []
+
+func _ready():
+	for i in range(max_health - health_nodes.size()):
+		var pos := Vector2(health_nodes.size() * 24 + 16, 16)
+		var node := scene_health.instance()
+		node_gui.add_child(node)
+		node.position = pos
+		health_nodes.append(node)
 
 func _physics_process(delta):
+	if invincibility >= 0.0:
+		node_sprite.visible = fmod(invincibility, 1.0/6.0) < 1.0/12.0
+		invincibility -= delta
+	else:
+		node_sprite.visible = true
 	var ivector := Vector2(0, 0)
 	ivector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	ivector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
@@ -72,3 +94,26 @@ func _physics_process(delta):
 			brender.add_bullet(shoot_from, shot_target, shootparent)
 	else:
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
+
+func do_damage(amount: int, accel: Vector2):
+	var newhealth := clamp(health - amount, 0, max_health)
+	for i in range(newhealth, health):
+		health_nodes[i].set_burning(false)
+	health = newhealth
+	if invincibility > 0.0:
+		return
+	velocity += accel
+	invincibility = INV_MAX
+	if health <= 0:
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		collision_mask = 0
+		collision_layer = 0
+		node_sprite.hide()
+		node_smoke.emitting = false
+		node_fire.emitting = false
+		var node = scene_kill.instance()
+		node.position = self.global_position
+		node.rotation = self.global_rotation
+		get_parent().add_child(node)

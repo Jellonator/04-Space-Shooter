@@ -109,3 +109,6 @@ local_coords = false
 draw_order = 1
 process_material = SubResource( 8 )
 texture = ExtResource( 4 )
+
+[node name="Gui" type="CanvasLayer" parent="."]
+layer = 10
