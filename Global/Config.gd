@@ -170,6 +170,8 @@ func set_config_value(name: String, value):
 	if name in CONFIG:
 		if typeof(CONFIG[name]) == typeof(value):
 			CONFIG[name] = value
+			config.set_value(SECTION_CONFIG, name, value)
+# warning-ignore:return_value_discarded
 			save_config()
 			return OK
 		else:

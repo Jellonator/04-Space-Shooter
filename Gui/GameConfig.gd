@@ -1,7 +1,9 @@
 extends Control
 
 func _ready():
-	set_mouse_use(GameConfig.get_config_value("mouse_enabled"))
+	var value = GameConfig.get_config_value("mouse_enabled")
+	set_mouse_use(value)
+	$VBoxContainer/CenterContainer/CheckButton.pressed = value
 
 func set_mouse_use(value: bool):
 	GameConfig.set_config_value("mouse_enabled", value)
