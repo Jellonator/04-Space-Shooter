@@ -7,7 +7,7 @@ onready var scene_locator := preload("res://Util/EnemyLocator.tscn")
 
 var locators := {}
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var camera := get_tree().get_nodes_in_group("camera")[0] as Camera2D
 	var center := camera.get_camera_screen_center()
 	for enemy_ in get_tree().get_nodes_in_group("enemy"):
@@ -19,6 +19,7 @@ func _physics_process(delta):
 			if not enemy in locators:
 				locators[enemy] = scene_locator.instance()
 				add_child(locators[enemy])
+# warning-ignore:return_value_discarded
 				enemy.connect("tree_exited", self, "_on_enemy_dead", [enemy])
 			locators[enemy].show()
 		elif epos.length() < LOOK_RADIUS_MIN:
@@ -39,4 +40,5 @@ func _physics_process(delta):
 func _on_enemy_dead(enemy):
 	if enemy in locators:
 		locators[enemy].queue_free()
+# warning-ignore:return_value_discarded
 	locators.erase(enemy)

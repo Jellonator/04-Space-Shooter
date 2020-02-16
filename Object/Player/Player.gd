@@ -7,6 +7,7 @@ const SHOTS_PER_SECOND := 6.0
 const INV_MAX := 0.5
 const scene_health := preload("res://Object/Player/HealthNode.tscn")
 const scene_kill := preload("res://Object/Player/Kill.tscn")
+const AUTOAIM_MIN_DOT := 0.75
 
 onready var node_sprite := $Sprite
 onready var node_front := $FrontPos
@@ -28,14 +29,29 @@ onready var shoot_locations = [node_left, node_right]
 var max_health := 3
 var health := max_health
 onready var health_nodes := []
+onready var look_rotation = self.rotation
 
 func _ready():
-	for i in range(max_health - health_nodes.size()):
+	for _i in range(max_health - health_nodes.size()):
 		var pos := Vector2(health_nodes.size() * 24 + 16, 16)
 		var node := scene_health.instance()
 		node_gui.add_child(node)
 		node.position = pos
 		health_nodes.append(node)
+
+func get_nearest_enemy_in_sight():
+	var ret = null
+	var dis = 0.0
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		var froma = Vector2(1, 0).rotated(look_rotation)
+		var toa = (enemy.global_position - global_position).normalized()
+		if froma.dot(toa) < AUTOAIM_MIN_DOT:
+			continue
+		var newdis = global_position.distance_squared_to(enemy.global_position)
+		if ret == null or newdis < dis:
+			ret = enemy
+			dis = newdis
+	return ret
 
 func _physics_process(delta):
 	if invincibility >= 0.0:
@@ -70,7 +86,12 @@ func _physics_process(delta):
 		lookvector.x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 		lookvector.y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 		if lookvector.length_squared() > 1e-2:
-			self.rotation = lerp_angle(self.rotation, lookvector.angle(), delta * 10)
+			look_rotation = lookvector.angle()
+			var target_rotation = look_rotation
+			var enemy = get_nearest_enemy_in_sight()
+			if enemy != null:
+				target_rotation = global_position.angle_to_point(enemy.global_position) + PI
+			self.rotation = lerp_angle(self.rotation, target_rotation, delta * 15)
 		do_shoot = Input.is_action_pressed("action_shoot_nonmouse")
 	velocity = move_and_slide(velocity)
 	var brender = get_tree().get_nodes_in_group("bullet_renderer")[0]
@@ -96,7 +117,7 @@ func _physics_process(delta):
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
 
 func do_damage(amount: int, accel: Vector2):
-	var newhealth := clamp(health - amount, 0, max_health)
+	var newhealth := int(clamp(health - amount, 0, max_health))
 	for i in range(newhealth, health):
 		health_nodes[i].set_burning(false)
 	health = newhealth

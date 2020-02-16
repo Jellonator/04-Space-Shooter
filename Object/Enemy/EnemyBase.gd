@@ -28,7 +28,7 @@ func do_kill():
 	collision_layer = 0
 
 func do_damage(amount: int, accel: Vector2):
-	health = clamp(health - amount, 0, max_health)
+	health = int(clamp(health - amount, 0, max_health))
 	if health <= 0:
 		do_kill()
 	mod_timer = 1.0 / 20.0
