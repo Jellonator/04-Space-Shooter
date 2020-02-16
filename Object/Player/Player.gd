@@ -7,7 +7,9 @@ const SHOTS_PER_SECOND := 6.0
 const INV_MAX := 0.5
 const scene_health := preload("res://Object/Player/HealthNode.tscn")
 const scene_kill := preload("res://Object/Player/Kill.tscn")
-const AUTOAIM_MIN_DOT := 0.75
+const AUTOAIM_MIN_DOT := 0.65
+const AUTOAIM_DISTANCE_MAX := 600.0
+const AUTOAIM_DISTANCE_MIN := 250.0
 
 onready var node_sprite := $Sprite
 onready var node_front := $FrontPos
@@ -45,9 +47,12 @@ func get_nearest_enemy_in_sight():
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		var froma = Vector2(1, 0).rotated(look_rotation)
 		var toa = (enemy.global_position - global_position).normalized()
-		if froma.dot(toa) < AUTOAIM_MIN_DOT:
+		var newdis = global_position.distance_to(enemy.global_position)
+		var lerpv = clamp((newdis - AUTOAIM_DISTANCE_MIN) /\
+			(AUTOAIM_DISTANCE_MAX - AUTOAIM_DISTANCE_MIN), 0.0, 1.0)
+		var target_dot = lerp(AUTOAIM_MIN_DOT, 1.0, lerpv)
+		if froma.dot(toa) < target_dot:
 			continue
-		var newdis = global_position.distance_squared_to(enemy.global_position)
 		if ret == null or newdis < dis:
 			ret = enemy
 			dis = newdis
