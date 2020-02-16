@@ -19,7 +19,9 @@ func _ready():
 	shoot_time = rand_range(0.8, 1.2)
 
 func _physics_process(delta):
-	var player = get_nearest_player()
+	if is_dead():
+		return
+	var player = GameUtil.get_nearest_player(global_position)
 	if player == null:
 		node_socket.position = Vector2(0, 0)
 		eye_mat.set_shader_param("offset", Vector2(0, 0))

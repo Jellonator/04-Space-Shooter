@@ -9,7 +9,7 @@ const scene_health := preload("res://Object/Player/HealthNode.tscn")
 const scene_kill := preload("res://Object/Player/Kill.tscn")
 const AUTOAIM_MIN_DOT := 0.65
 const AUTOAIM_DISTANCE_MAX := 600.0
-const AUTOAIM_DISTANCE_MIN := 250.0
+const AUTOAIM_DISTANCE_MIN := 300.0
 
 onready var node_sprite := $Sprite
 onready var node_front := $FrontPos
@@ -32,6 +32,7 @@ var max_health := 3
 var health := max_health
 onready var health_nodes := []
 onready var look_rotation = self.rotation
+var score := 0
 
 func _ready():
 	for _i in range(max_health - health_nodes.size()):
@@ -90,7 +91,7 @@ func _physics_process(delta):
 		var lookvector := Vector2(0, 0)
 		lookvector.x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 		lookvector.y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
-		if lookvector.length_squared() > 1e-2:
+		if lookvector.length_squared() > 1e-3:
 			look_rotation = lookvector.angle()
 			var target_rotation = look_rotation
 			var enemy = get_nearest_enemy_in_sight()
@@ -122,13 +123,13 @@ func _physics_process(delta):
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
 
 func do_damage(amount: int, accel: Vector2):
+	if invincibility > 0.0:
+		return
+	velocity += accel
 	var newhealth := int(clamp(health - amount, 0, max_health))
 	for i in range(newhealth, health):
 		health_nodes[i].set_burning(false)
 	health = newhealth
-	if invincibility > 0.0:
-		return
-	velocity += accel
 	invincibility = INV_MAX
 	if health <= 0:
 		set_process(false)
@@ -142,4 +143,9 @@ func do_damage(amount: int, accel: Vector2):
 		var node = scene_kill.instance()
 		node.position = self.global_position
 		node.rotation = self.global_rotation
+		node.score = score
 		get_parent().add_child(node)
+
+func add_score(amount: int):
+	score += amount
+	$Gui/VBox/Score.text = "%08d" % score
