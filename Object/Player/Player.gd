@@ -96,7 +96,8 @@ func _physics_process(delta):
 			var target_rotation = look_rotation
 			var enemy = get_nearest_enemy_in_sight()
 			if enemy != null:
-				target_rotation = global_position.angle_to_point(enemy.global_position) + PI
+				var newrot = global_position.angle_to_point(enemy.global_position) + PI
+				target_rotation = lerp_angle(look_rotation, newrot, 0.5)
 			self.rotation = lerp_angle(self.rotation, target_rotation, delta * 15)
 		do_shoot = Input.is_action_pressed("action_shoot_nonmouse")
 	velocity = move_and_slide(velocity)

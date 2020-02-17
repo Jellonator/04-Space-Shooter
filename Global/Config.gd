@@ -1,5 +1,21 @@
 extends Node
 
+# Jello's cool user configuration script. Be sure to add this as a global
+# Autoload script in the project settings!
+# How to configure:
+#     * Add all of the inputs you want the user to be able to configure to
+#     SECTION_KEY_ELEMENTS. The keys in this dictionary are the names of the
+#     inputs as defined in the Input Map in project settings, and the values
+#     are the user-readable names.
+#     * Add all of the volumes you want the user to be able to configure to
+#     SECTION_VOLUME_ELEMENTS. The values in this array are the bus names.
+#     * Add all of the miscellaneous configuration elements to CONFIG. The keys
+#     in this dictionary are the names of the elements, and the values are the
+#     default values for these elements.
+# By default, the configuration is stored in user://configuration.cfg. You can
+# Chance this to a different file by modifying CONFIG_FILE.
+# The config file will be automatically loaded when this script is autoloaded.
+
 # Path to the user's configuration file
 const CONFIG_FILE := "user://configuration.cfg"
 # Handle to the user's configuration file
@@ -12,27 +28,7 @@ const SECTION_VOLUME := "volume"
 # Section for game config
 const SECTION_CONFIG := "config"
 # All configurable keys
-const SECTION_KEY_ELEMENTS := [
-	"move_up",
-	"move_down",
-	"move_left",
-	"move_right",
-	"look_up",
-	"look_down",
-	"look_left",
-	"look_right",
-	"action_shoot_mouse",
-	"action_shoot_nonmouse",
-	"game_pause"
-]
-# All configurable volumes
-const SECTION_VOLUME_ELEMENTS := [
-	"Sound",
-	"Music",
-	"Master",
-]
-# Real names for inputs
-const INPUT_REALNAMES := {
+const SECTION_KEY_ELEMENTS := {
 	"move_up": "Move Up",
 	"move_down": "Move Down",
 	"move_left": "Move Left",
@@ -45,6 +41,12 @@ const INPUT_REALNAMES := {
 	"action_shoot_nonmouse": "Shoot",
 	"game_pause": "Pause"
 }
+# All configurable volumes
+const SECTION_VOLUME_ELEMENTS := [
+	"Sound",
+	"Music",
+	"Master",
+]
 
 # CONFIG VALUES
 var CONFIG := {
@@ -53,8 +55,8 @@ var CONFIG := {
 
 # Get the real name for a given action
 func get_action_name(name: String) -> String:
-	if INPUT_REALNAMES.has(name):
-		return INPUT_REALNAMES[name]
+	if SECTION_KEY_ELEMENTS.has(name):
+		return SECTION_KEY_ELEMENTS[name]
 	return "Invalid"
 
 # Get the volume for the given volume name
@@ -66,25 +68,25 @@ func get_volume_slider(name: String) -> float:
 	return get_volume(name) * 100
 	
 # Updates the volume of the given bus to the given value
-func update_volume(name: String):
+func _update_volume(name: String):
 	var volumedb := linear2db(get_volume(name))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(name), volumedb)
 
 # Set the volume for the given volume name
 func set_volume(name: String, value: float):
 	config.set_value(SECTION_VOLUME, name, value);
-	update_volume(name)
+	_update_volume(name)
 # warning-ignore:return_value_discarded
-	save_config();
+	_save_config();
 
 # Set the volume but from 1 - 100
 func set_volume_slider(name: String, value: float):
 	set_volume(name, value/100)
 
 # Used to make sure config has all of the necessary settings
-func check_config():
+func _check_config():
 	var does_need_save := false
-	for name in SECTION_KEY_ELEMENTS:
+	for name in SECTION_KEY_ELEMENTS.keys():
 		if not config.has_section_key(SECTION_KEYS, name):
 			config.set_value(SECTION_KEYS, name, InputMap.get_action_list(name)[0]);
 			does_need_save = true
@@ -94,10 +96,12 @@ func check_config():
 			does_need_save = true
 	for name in CONFIG:
 		if not config.has_section_key(SECTION_CONFIG, name):
-			config.set_value(SECTION_CONFIG, name, CONFIG[name])
+			if not config.has_section_key(SECTION_CONFIG, name):
+				config.set_value(SECTION_CONFIG, name, CONFIG[name])
+				does_need_save = true
 	if does_need_save:
 # warning-ignore:return_value_discarded
-		save_config()
+		_save_config()
 
 func _ready():
 	# Make sure that the config file exists
@@ -107,13 +111,13 @@ func _ready():
 		file.open(CONFIG_FILE, file.WRITE)
 		file.close();
 # warning-ignore:return_value_discarded
-		save_config();
+		_save_config();
 # warning-ignore:return_value_discarded
-	load_config();
+	_load_config();
 
 # Update all events in map to match settings
-func update_events():
-	for name in SECTION_KEY_ELEMENTS:
+func _update_events():
+	for name in SECTION_KEY_ELEMENTS.keys():
 		var events = config.get_value(SECTION_KEYS, name);
 		InputMap.erase_action(name);
 		InputMap.add_action(name);
@@ -124,22 +128,22 @@ func update_events():
 			InputMap.action_add_event(name, events);
 
 # Converts the given volume to DB.
-func update_volumes():
+func _update_volumes():
 	for name in SECTION_VOLUME_ELEMENTS:
-		update_volume(name)
+		_update_volume(name)
 
 # Load configuration
-func load_config() -> int:
+func _load_config() -> int:
 	var err := config.load(CONFIG_FILE);
 	if err != OK:
 		printerr("Error loading user configuration: ", err);
 	# After loading, check configuration
 	# to make sure it is valid
-	check_config();
+	_check_config();
 	# And update InputMap to match
-	update_events();
+	_update_events();
 	# Also update volume
-	update_volumes();
+	_update_volumes();
 	# Update config
 	for key in CONFIG:
 		if config.has_section_key(SECTION_CONFIG, key):
@@ -147,7 +151,7 @@ func load_config() -> int:
 	return err
 
 # Save configuration to file
-func save_config() -> int:
+func _save_config() -> int:
 	var err := config.save(CONFIG_FILE);
 	if err != OK:
 		printerr("Error saving user configuration: ", err);
@@ -161,24 +165,25 @@ func get_keybind(name: String):
 func set_keybind(name: String, event: InputEvent):
 	config.set_value(SECTION_KEYS, name, event)
 # warning-ignore:return_value_discarded
-	save_config()
-	InputMap.erase_action(name);
-	InputMap.add_action(name);
+	_save_config()
+	InputMap.action_erase_events(name)
 	InputMap.action_add_event(name, event);
 
+# Set the value of a configuration variable.
 func set_config_value(name: String, value):
 	if name in CONFIG:
 		if typeof(CONFIG[name]) == typeof(value):
 			CONFIG[name] = value
 			config.set_value(SECTION_CONFIG, name, value)
 # warning-ignore:return_value_discarded
-			save_config()
+			_save_config()
 			return OK
 		else:
 			return ERR_INVALID_DATA
 	else:
 		return ERR_DOES_NOT_EXIST
 
+# Get the value of a configuration variable.
 func get_config_value(name: String):
 	return CONFIG[name]
 

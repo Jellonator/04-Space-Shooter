@@ -5,7 +5,7 @@ const ROTATION_SPEED_MAX := PI * 0.5
 const BASE_RADIUS := 64.0
 const RADIUS_SCALE := 16.0
 const SPEED := 180.0
-const BOY_SPEED := SPEED * 2.0
+const BOY_SPEED := SPEED
 export var num_boys := 3
 var velocity := Vector2(0, 0)
 
