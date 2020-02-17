@@ -7,12 +7,16 @@ const scene_spawner := preload("res://Object/Enemy/EnemySpawner.tscn")
 var ordered_waves := [
 	[enemy_eye],
 	[enemy_boycircle],
-	[enemy_eye, enemy_boycircle]
-]
-var rand_waves := [
+	[enemy_eye, enemy_boycircle],
 	[enemy_eye, enemy_eye, enemy_eye],
 	[enemy_eye, enemy_eye, enemy_boycircle],
 	[enemy_eye, enemy_boycircle, enemy_boycircle],
+]
+var rand_waves := [
+	[enemy_eye, enemy_eye, enemy_eye, enemy_eye, enemy_boycircle],
+	[enemy_eye, enemy_eye, enemy_eye, enemy_boycircle, enemy_boycircle],
+	[enemy_eye, enemy_eye, enemy_boycircle, enemy_boycircle, enemy_boycircle],
+	[enemy_eye, enemy_boycircle, enemy_boycircle, enemy_boycircle, enemy_boycircle],
 ]
 var current_wave := 0
 

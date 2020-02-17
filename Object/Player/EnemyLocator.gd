@@ -34,6 +34,7 @@ func _physics_process(_delta):
 		epos -= center
 		epos.x /= 960/540.0
 		var rot := epos.angle()
+		locator.visible = not enemy.is_paused()
 		locator.rotation = rot + 1.5 * PI/2
 		locator.position = Vector2(DRAW_RADIUS, 0).rotated(rot)
 		locator.position.x *= 960.0/540.0

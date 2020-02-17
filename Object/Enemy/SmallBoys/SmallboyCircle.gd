@@ -9,6 +9,7 @@ const BOY_SPEED := SPEED
 export var num_boys := 3
 var velocity := Vector2(0, 0)
 var paused := false setget set_paused, is_paused
+var kill_timer := 2.0
 
 func get_spawner_radius() -> float:
 	return 32.0
@@ -20,6 +21,8 @@ func set_paused(value: bool):
 
 func is_paused() -> bool:
 	return paused
+
+signal killed();
 
 var boys := []
 var t := 0.0
@@ -36,7 +39,9 @@ func _ready():
 func _physics_process(delta):
 	var n := boys.size()
 	if n == 0:
-		queue_free()
+		kill_timer -= delta
+		if kill_timer < 0.0:
+			queue_free()
 		return
 	if paused:
 		return
@@ -65,3 +70,5 @@ func _physics_process(delta):
 
 func _on_boy_killed(boy):
 	boys.erase(boy)
+	if boys.size() == 0:
+		self.paused = true

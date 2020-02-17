@@ -22,6 +22,8 @@ func _ready():
 
 var t := 0.0
 
+signal killed();
+
 func _physics_process(delta):
 	t += delta * 2.0
 	var rad = (sin(t - PI*0.5) * 0.5 + 0.5) * radius
