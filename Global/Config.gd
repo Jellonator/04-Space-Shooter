@@ -238,11 +238,11 @@ func get_event_name(event: InputEvent) -> String:
 			return "Mouse button " + str(emb.button_index)
 	if event is InputEventJoypadButton:
 		var ejb := event as InputEventJoypadButton
-		return "Button " + str(ejb.button_index)
+		return Input.get_joy_button_string(ejb.button_index)
 	if event is InputEventJoypadMotion:
 		var ejm := event as InputEventJoypadMotion
 		if ejm.axis_value < 0:
-			return "Axis -" + str(ejm.axis)
+			return "-" + Input.get_joy_axis_string(ejm.axis)
 		else:
-			return "Axis " + str(ejm.axis)
+			return "+" + Input.get_joy_axis_string(ejm.axis)
 	return "Invalid"
