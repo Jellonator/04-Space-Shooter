@@ -44,5 +44,9 @@ func _physics_process(delta):
 			$SndShoot.play()
 			shot.global_position = global_position
 			shot.velocity = diff.normalized() * SHOOT_SPEED
-		if shoot_time > 0.2 and shoot_time < 0.6:
+		if shoot_time > 0.2 and shoot_time < 0.8:
 			tween_velocity(diff.normalized() * SPEED, delta * ACCEL)
+		if shoot_time < 0.2 and fmod(shoot_time / SHOOT_RATE, 1.0/6.0) < 1.0/12.0:
+			node_eye.self_modulate = Color.red
+		else:
+			node_eye.self_modulate = Color.white

@@ -35,6 +35,7 @@ onready var health_nodes := []
 onready var look_rotation = self.rotation
 var score := 0
 var snd_move_pitch := 0.5
+var shot_range := 500.0
 
 func _ready():
 	for _i in range(max_health - health_nodes.size()):
@@ -129,7 +130,7 @@ func _physics_process(delta):
 			var shoot_from := shootparent.global_position as Vector2
 			shoot_i = (shoot_i + 1) % shoot_locations.size()
 			var shot_direction := Vector2(1, 0).rotated(self.global_rotation)
-			var shot_target := shoot_from + shot_direction * 10000
+			var shot_target := shoot_from + shot_direction * shot_range
 			var space := get_world_2d().direct_space_state
 			var enemylayer := 0b101
 			var result := space.intersect_ray(shoot_from, shot_target, [self], enemylayer)

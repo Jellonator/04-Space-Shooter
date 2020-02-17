@@ -28,8 +28,15 @@ func spawn_wave():
 		wave = ordered_waves[current_wave]
 	else:
 		wave = rand_waves[randi() % rand_waves.size()]
+	var players = get_tree().get_nodes_in_group("player")
+	var center = Vector2(0, 0)
+	if players.size() > 0:
+		center = players[0].global_position
 	for e in wave:
-		spawn_enemy(e, Vector2(rand_range(-800, 800), rand_range(-800, 800)))
+		var a = rand_range(0, 2*PI)
+		var dis = rand_range(100, 300)
+		var pos = center + Vector2(dis, 0).rotated(a)
+		spawn_enemy(e, pos)
 	current_wave += 1
 
 func _physics_process(_delta):
