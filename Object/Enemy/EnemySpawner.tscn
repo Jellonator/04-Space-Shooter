@@ -1,26 +1,10 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Object/Enemy/EnemySpawner.gd" type="Script" id=1]
+[ext_resource path="res://Object/Enemy/spawn.shader" type="Shader" id=2]
 
-[sub_resource type="Shader" id=2]
-code = "shader_type canvas_item;
-
-uniform float radius;
-
-void fragment() {
-	vec2 center = vec2(0.5, 0.5) / TEXTURE_PIXEL_SIZE;
-	float dis = distance(center, UV / TEXTURE_PIXEL_SIZE);
-	if (abs(dis - radius + 2.0) < 2.0) {
-		COLOR = vec4(248.0, 56.0, 0.0, 256.0) / 256.0;
-	} else if (dis < radius) {
-		COLOR = texture(TEXTURE, UV);
-	} else {
-		COLOR = vec4(0, 0, 0, 0);
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
 shader_param/radius = null
 
 [sub_resource type="ViewportTexture" id=1]
@@ -35,5 +19,5 @@ transparent_bg = true
 render_target_v_flip = true
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 3 )
+material = SubResource( 2 )
 texture = SubResource( 1 )
