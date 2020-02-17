@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Object/Enemy/EyeRock/base.PNG" type="Texture" id=1]
 [ext_resource path="res://Object/Enemy/EyeEnemy.gd" type="Script" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Object/Enemy/EyeRock/socket.PNG" type="Texture" id=4]
 [ext_resource path="res://Object/Enemy/EyeRock/eye.PNG" type="Texture" id=5]
 [ext_resource path="res://Object/Enemy/EyeRock/mask.PNG" type="Texture" id=6]
+[ext_resource path="res://Sounds/sfx_deathscream_alien3.wav" type="AudioStream" id=7]
+[ext_resource path="res://Sounds/sfx_wpn_cannon6.wav" type="AudioStream" id=8]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -38,3 +40,11 @@ texture = ExtResource( 5 )
 visible = false
 position = Vector2( 1, 0 )
 shape = SubResource( 2 )
+
+[node name="SndDead" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+bus = "Sound"
+
+[node name="SndShoot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+bus = "Sound"

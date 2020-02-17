@@ -17,6 +17,8 @@ func _ready():
 	node.paused = true
 	radius = node.get_spawner_radius() + 8.0
 	$Viewport.add_child(node)
+	$SndSpawn.pitch_scale = rand_range(0.4, 0.55)
+	$SndSpawn.play()
 
 var t := 0.0
 

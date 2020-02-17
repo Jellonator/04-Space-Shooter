@@ -16,6 +16,7 @@ var death_timer := 1.0
 var smat: ShaderMaterial
 var velocity := Vector2(0, 0)
 var paused := false setget set_paused, get_paused
+var node_snd_hit: AudioStreamPlayer2D
 
 func get_paused() -> bool:
 	return paused
@@ -32,6 +33,10 @@ func get_spawner_radius() -> float:
 	return spawner_radius
 
 func _ready():
+	node_snd_hit = AudioStreamPlayer2D.new()
+	add_child(node_snd_hit)
+	node_snd_hit.stream = preload("res://Sounds/sfx_sounds_impact6.wav")
+	node_snd_hit.volume_db = -6
 	health = max_health
 	smat = ShaderMaterial.new()
 	smat.shader = shader
@@ -55,6 +60,8 @@ func do_kill():
 	get_tree().current_scene.add_child(txt)
 
 func do_damage(amount: int, accel: Vector2):
+	node_snd_hit.pitch_scale = rand_range(0.9, 1.1)
+	node_snd_hit.play()
 	health = int(clamp(health - amount, 0, max_health))
 	if health <= 0:
 		do_kill()

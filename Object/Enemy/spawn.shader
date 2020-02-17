@@ -20,6 +20,8 @@ void fragment() {
 		COLOR = vec4(248.0, 56.0, 0.0, 256.0) / 256.0;
 	} else if (dis < r) {
 		COLOR = texture(TEXTURE, UV);
+		COLOR.rgb = mix(vec3(0.0, 0.0, 0.0), COLOR.rgb, COLOR.a);
+		COLOR.a = 1.0;
 	} else {
 		COLOR = vec4(0, 0, 0, 0);
 	}

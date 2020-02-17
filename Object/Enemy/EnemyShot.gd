@@ -22,4 +22,4 @@ func _on_Area2D_body_entered(body):
 	did_hit = true
 	$Particles2D.emitting = false
 	if body.has_method("do_damage"):
-		body.do_damage(1, Vector2(0, 0))
+		body.do_damage(1, velocity.normalized() * 400)

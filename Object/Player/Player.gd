@@ -4,12 +4,13 @@ const FRICTION := 400.0
 const ACCELERATION := 800.0
 const MAX_SPEED := 500.0
 const SHOTS_PER_SECOND := 6.0
-const INV_MAX := 0.5
+const INV_MAX := 1.0
 const scene_health := preload("res://Object/Player/HealthNode.tscn")
 const scene_kill := preload("res://Object/Player/Kill.tscn")
 const AUTOAIM_MIN_DOT := 0.65
 const AUTOAIM_DISTANCE_MAX := 600.0
 const AUTOAIM_DISTANCE_MIN := 300.0
+const SND_PITCH_CHANGE := 2.5
 
 onready var node_sprite := $Sprite
 onready var node_front := $FrontPos
@@ -33,6 +34,7 @@ var health := max_health
 onready var health_nodes := []
 onready var look_rotation = self.rotation
 var score := 0
+var snd_move_pitch := 0.5
 
 func _ready():
 	for _i in range(max_health - health_nodes.size()):
@@ -41,6 +43,8 @@ func _ready():
 		node_gui.add_child(node)
 		node.position = pos
 		health_nodes.append(node)
+	$SndMove.pitch_scale = snd_move_pitch
+	$SndMove.play()
 
 func get_nearest_enemy_in_sight():
 	var ret = null
@@ -60,6 +64,13 @@ func get_nearest_enemy_in_sight():
 	return ret
 
 func _physics_process(delta):
+	if health <= 0:
+		if snd_move_pitch > delta * SND_PITCH_CHANGE * 0.2:
+			snd_move_pitch -= delta * SND_PITCH_CHANGE * 0.2
+			$SndMove.pitch_scale = snd_move_pitch
+		else:
+			$SndMove.stop()
+		return
 	if invincibility >= 0.0:
 		node_sprite.visible = fmod(invincibility, 1.0/6.0) < 1.0/12.0
 		invincibility -= delta
@@ -77,6 +88,14 @@ func _physics_process(delta):
 		part_fire.direction = part_smoke.direction
 	else:
 		node_smoke.emitting = false
+	var target_pitch_scale = lerp(0.6, 2.5, ivector.length())
+	if abs(snd_move_pitch - target_pitch_scale) < delta * SND_PITCH_CHANGE:
+		snd_move_pitch = target_pitch_scale
+	elif snd_move_pitch < target_pitch_scale:
+		snd_move_pitch += delta * SND_PITCH_CHANGE
+	else:
+		snd_move_pitch -= delta * SND_PITCH_CHANGE
+	$SndMove.pitch_scale = snd_move_pitch
 	var target_velocity := MAX_SPEED * ivector
 	var vdiff := target_velocity - velocity
 	if vdiff.length() < ACCELERATION * delta:
@@ -120,12 +139,15 @@ func _physics_process(delta):
 					collider.do_damage(1, shot_direction * 50)
 				shot_target = result.position + shot_direction * 10
 			brender.add_bullet(shoot_from, shot_target, shootparent)
+			$SndShoot.pitch_scale = rand_range(0.9, 1.1)
+			$SndShoot.play()
 	else:
 		shot_timer = max(0.0, shot_timer - delta * SHOTS_PER_SECOND)
 
 func do_damage(amount: int, accel: Vector2):
 	if invincibility > 0.0:
 		return
+	$SndHurt.pitch_scale = rand_range(0.9, 1.1)
 	velocity += accel
 	var newhealth := int(clamp(health - amount, 0, max_health))
 	for i in range(newhealth, health):
@@ -133,9 +155,6 @@ func do_damage(amount: int, accel: Vector2):
 	health = newhealth
 	invincibility = INV_MAX
 	if health <= 0:
-		set_process(false)
-		set_physics_process(false)
-		set_process_input(false)
 		collision_mask = 0
 		collision_layer = 0
 		node_sprite.hide()
@@ -146,6 +165,9 @@ func do_damage(amount: int, accel: Vector2):
 		node.rotation = self.global_rotation
 		node.score = score
 		get_parent().add_child(node)
+		snd_move_pitch = 2.5
+	else:
+		$SndHurt.play()
 
 func add_score(amount: int):
 	score += amount

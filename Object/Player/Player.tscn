@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Object/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Object/Player/PurpleFlame.png" type="Texture" id=2]
@@ -9,6 +9,9 @@
 [ext_resource path="res://Gui/GameConfig.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Sounds/sfx_sounds_pause2_in.wav" type="AudioStream" id=8]
 [ext_resource path="res://Sounds/sfx_sounds_pause2_out.wav" type="AudioStream" id=9]
+[ext_resource path="res://Sounds/sfx_wpn_laser7.wav" type="AudioStream" id=10]
+[ext_resource path="res://Sounds/sfx_vehicle_plainloop.wav" type="AudioStream" id=11]
+[ext_resource path="res://Sounds/sfx_exp_short_hard8.wav" type="AudioStream" id=12]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.344512, 0.734756, 1 )
@@ -202,12 +205,28 @@ text = "Unpause"
 
 [node name="SndPause" type="AudioStreamPlayer" parent="Gui/Pause"]
 stream = ExtResource( 8 )
+volume_db = -12.0
 bus = "Sound"
 
 [node name="SndUnpause" type="AudioStreamPlayer" parent="Gui/Pause"]
 stream = ExtResource( 9 )
+volume_db = -12.0
 bus = "Sound"
 
 [node name="EnemyLocator" type="Node2D" parent="Gui"]
 script = ExtResource( 5 )
+
+[node name="SndMove" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )
+volume_db = -10.0
+bus = "Sound"
+
+[node name="SndShoot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+volume_db = -6.0
+bus = "Sound"
+
+[node name="SndHurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 12 )
+bus = "Sound"
 [connection signal="pressed" from="Gui/Pause/Margin/Panel/VBox/Center/Unpause" to="Gui/Pause" method="_on_Unpause_pressed"]

@@ -17,6 +17,11 @@ var shoot_time := 0.0
 
 func _ready():
 	shoot_time = rand_range(0.5, 1.0)
+	connect("killed", self, "play_death")
+
+func play_death():
+	$SndDead.pitch_scale = rand_range(0.9, 1.1)
+	$SndDead.play()
 
 func _physics_process(delta):
 	if is_paused():
@@ -35,6 +40,7 @@ func _physics_process(delta):
 			shoot_time = rand_range(0.9, 1.1)
 			var shot = SHOOT_SCENE.instance()
 			get_parent().add_child(shot)
+			$SndShoot.play()
 			shot.global_position = global_position
 			shot.velocity = diff.normalized() * SHOOT_SPEED
 		if shoot_time > 0.2 and shoot_time < 0.6:

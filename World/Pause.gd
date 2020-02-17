@@ -3,8 +3,6 @@ extends Control
 onready var node_unpause = $Margin/Panel/VBox/Center/Unpause
 
 func _ready():
-	print(linear2db(0.0))
-	print(db2linear(-6))
 	hide()
 
 func _input(event):

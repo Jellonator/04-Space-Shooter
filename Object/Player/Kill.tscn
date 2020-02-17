@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Object/Player/PurpleFlameKaboom.png" type="Texture" id=1]
 [ext_resource path="res://Object/Player/Kill.gd" type="Script" id=2]
+[ext_resource path="res://Sounds/sfx_exp_double2.wav" type="AudioStream" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "kill"
@@ -92,6 +93,20 @@ tracks/6/keys = {
 "update": 0,
 "values": [ 0.0, 0.0, 1.0 ]
 }
+tracks/7/type = "method"
+tracks/7/path = NodePath("SndKill")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+} ]
+}
 
 [sub_resource type="StyleBoxFlat" id=2]
 content_margin_left = 8.0
@@ -104,10 +119,8 @@ bg_color = Color( 0, 0, 0, 0.784314 )
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-visible = false
 texture = ExtResource( 1 )
 hframes = 10
-frame = 9
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 2.0
@@ -123,6 +136,7 @@ __meta__ = {
 }
 
 [node name="Panel" type="PanelContainer" parent="CanvasLayer/Control"]
+self_modulate = Color( 1, 1, 1, 0 )
 margin_left = 434.0
 margin_top = 230.0
 margin_right = 526.0
@@ -142,7 +156,7 @@ margin_bottom = 14.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
 text = "GAME OVER"
-percent_visible = 1.25
+percent_visible = 0.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -152,10 +166,15 @@ margin_top = 22.0
 margin_right = 76.0
 margin_bottom = 36.0
 text = "..."
+percent_visible = 0.0
 
 [node name="Button" type="Button" parent="CanvasLayer/Control/Panel/VBoxContainer"]
+self_modulate = Color( 1, 1, 1, 0 )
 margin_top = 44.0
 margin_right = 76.0
 margin_bottom = 64.0
 text = "Exit"
+
+[node name="SndKill" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
 [connection signal="pressed" from="CanvasLayer/Control/Panel/VBoxContainer/Button" to="." method="_on_Button_pressed"]
