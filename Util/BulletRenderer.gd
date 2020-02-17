@@ -11,10 +11,10 @@ class BulletData:
 	var life: float = 1
 	var firstframe: bool = true
 	var parent
-	func _init(frompos: Vector2, topos: Vector2, parent):
-		self.frompos = frompos
-		self.topos = topos
-		self.parent = parent
+	func _init(p_frompos: Vector2, p_topos: Vector2, p_parent):
+		self.frompos = p_frompos
+		self.topos = p_topos
+		self.parent = p_parent
 	func length() -> float:
 		return frompos.distance_to(topos)
 

@@ -17,6 +17,7 @@ var shoot_time := 0.0
 
 func _ready():
 	shoot_time = rand_range(0.5, 1.0)
+# warning-ignore:return_value_discarded
 	connect("killed", self, "play_death")
 
 func play_death():

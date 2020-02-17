@@ -25,11 +25,12 @@ var boys := []
 var t := 0.0
 
 func _ready():
-	for i in range(num_boys):
+	for _i in range(num_boys):
 		var boy := scene_boy.instance()
 		add_child(boy)
 		boys.append(boy)
 		boy.paused = paused
+# warning-ignore:return_value_discarded
 		boy.connect("killed", self, "_on_boy_killed", [boy])
 
 func _physics_process(delta):

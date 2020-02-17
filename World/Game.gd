@@ -13,6 +13,6 @@ func spawn_enemy(scene: PackedScene, pos: Vector2):
 func spawn_wave():
 	pass
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if get_tree().get_nodes_in_group("enemy").size() == 0:
 		spawn_enemy(enemy_eye, Vector2(rand_range(-800, 800), rand_range(-800, 800)))

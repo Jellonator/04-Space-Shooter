@@ -21,7 +21,7 @@ func update_config(event):
 	previous_input = previous_input
 	GameConfig.set_keybind(input_name, event)
 #
-func _physics_process(delta):
+func _physics_process(_delta):
 	node_btn.disabled = pressed
 
 func _input(event):
