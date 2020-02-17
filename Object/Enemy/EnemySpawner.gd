@@ -9,7 +9,7 @@ onready var node_sprite := $Sprite
 onready var mat_sprite := node_sprite.material as ShaderMaterial
 
 func is_paused():
-	return false
+	return node == null
 
 func _ready():
 	node = scene.instance()
@@ -21,8 +21,6 @@ func _ready():
 	$SndSpawn.play()
 
 var t := 0.0
-
-signal killed();
 
 func _physics_process(delta):
 	t += delta * 2.0

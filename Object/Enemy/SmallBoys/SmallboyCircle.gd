@@ -22,8 +22,6 @@ func set_paused(value: bool):
 func is_paused() -> bool:
 	return paused
 
-signal killed();
-
 var boys := []
 var t := 0.0
 
