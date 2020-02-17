@@ -15,10 +15,10 @@ var mod_timer := 0.0
 var death_timer := 1.0
 var smat: ShaderMaterial
 var velocity := Vector2(0, 0)
-var paused := false setget set_paused, get_paused
+var paused := false setget set_paused, is_paused
 var node_snd_hit: AudioStreamPlayer2D
 
-func get_paused() -> bool:
+func is_paused() -> bool:
 	return paused
 
 func set_paused(value: bool):
@@ -41,9 +41,6 @@ func _ready():
 	smat = ShaderMaterial.new()
 	smat.shader = shader
 
-func is_paused():
-	return health <= 0 or paused
-
 func is_dead():
 	return health <= 0
 
@@ -51,6 +48,7 @@ func do_kill():
 	emit_signal("killed")
 	for sprite in sprites:
 		get_node(sprite).material = smat
+	set_paused(true)
 	collision_mask = 0
 	collision_layer = 0
 	get_tree().call_group("score", "add_score", score_value)

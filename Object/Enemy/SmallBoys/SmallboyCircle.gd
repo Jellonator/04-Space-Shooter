@@ -8,7 +8,7 @@ const SPEED := 180.0
 const BOY_SPEED := SPEED
 export var num_boys := 3
 var velocity := Vector2(0, 0)
-var paused := false setget set_paused, get_paused
+var paused := false setget set_paused, is_paused
 
 func get_spawner_radius() -> float:
 	return 32.0
@@ -16,9 +16,9 @@ func get_spawner_radius() -> float:
 func set_paused(value: bool):
 	paused = value
 	for boy in boys:
-		boy.paused = get_paused()
+		boy.paused = is_paused()
 
-func get_paused() -> bool:
+func is_paused() -> bool:
 	return paused
 
 var boys := []
