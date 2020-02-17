@@ -16,7 +16,7 @@ onready var eye_mat := node_eye.material as ShaderMaterial
 var shoot_time := 0.0
 
 func _ready():
-	shoot_time = rand_range(0.8, 1.2)
+	shoot_time = rand_range(0.5, 1.0)
 
 func _physics_process(delta):
 	if is_paused():

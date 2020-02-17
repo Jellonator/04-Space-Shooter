@@ -12,6 +12,8 @@ func _physics_process(_delta):
 	var center := camera.get_camera_screen_center()
 	for enemy_ in get_tree().get_nodes_in_group("enemy"):
 		var enemy := enemy_ as Node2D
+		if enemy.is_paused():
+			continue
 		var epos := enemy.global_position
 		epos -= center
 		epos.x /= 960/540.0

@@ -19,6 +19,7 @@ radius = 30.0666
 "enemy",
 ]]
 collision_layer = 4
+collision_mask = 5
 script = ExtResource( 2 )
 sprites = [ NodePath("Base"), NodePath("Base/Socket"), NodePath("Base/Socket/Eye") ]
 

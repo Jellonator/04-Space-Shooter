@@ -1,9 +1,14 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Object/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Object/Player/PurpleFlame.png" type="Texture" id=2]
 [ext_resource path="res://Object/Player/bigsmoke.png" type="Texture" id=3]
 [ext_resource path="res://Object/Player/lilsmoke.png" type="Texture" id=4]
+[ext_resource path="res://World/EnemyLocator.gd" type="Script" id=5]
+[ext_resource path="res://World/Pause.gd" type="Script" id=6]
+[ext_resource path="res://Gui/GameConfig.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Sounds/sfx_sounds_pause2_in.wav" type="AudioStream" id=8]
+[ext_resource path="res://Sounds/sfx_sounds_pause2_out.wav" type="AudioStream" id=9]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.344512, 0.734756, 1 )
@@ -59,6 +64,13 @@ damping = 50.0
 damping_random = 0.75
 scale_curve = SubResource( 4 )
 color_ramp = SubResource( 7 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.0705882, 0.0705882, 0.0705882, 0.929412 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "player",
@@ -140,3 +152,62 @@ text = "00000000"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Pause" type="Control" parent="Gui"]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Margin" type="CenterContainer" parent="Gui/Pause"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="Gui/Pause/Margin"]
+margin_left = 320.0
+margin_top = 110.0
+margin_right = 640.0
+margin_bottom = 430.0
+rect_min_size = Vector2( 320, 320 )
+custom_styles/panel = SubResource( 9 )
+
+[node name="VBox" type="VBoxContainer" parent="Gui/Pause/Margin/Panel"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 312.0
+margin_bottom = 312.0
+
+[node name="GameConfig" parent="Gui/Pause/Margin/Panel/VBox" instance=ExtResource( 7 )]
+margin_right = 304.0
+margin_bottom = 280.0
+size_flags_vertical = 3
+
+[node name="Center" type="CenterContainer" parent="Gui/Pause/Margin/Panel/VBox"]
+margin_top = 284.0
+margin_right = 304.0
+margin_bottom = 304.0
+
+[node name="Unpause" type="Button" parent="Gui/Pause/Margin/Panel/VBox/Center"]
+margin_left = 118.0
+margin_right = 186.0
+margin_bottom = 20.0
+text = "Unpause"
+
+[node name="SndPause" type="AudioStreamPlayer" parent="Gui/Pause"]
+stream = ExtResource( 8 )
+bus = "Sound"
+
+[node name="SndUnpause" type="AudioStreamPlayer" parent="Gui/Pause"]
+stream = ExtResource( 9 )
+bus = "Sound"
+
+[node name="EnemyLocator" type="Node2D" parent="Gui"]
+script = ExtResource( 5 )
+[connection signal="pressed" from="Gui/Pause/Margin/Panel/VBox/Center/Unpause" to="Gui/Pause" method="_on_Unpause_pressed"]

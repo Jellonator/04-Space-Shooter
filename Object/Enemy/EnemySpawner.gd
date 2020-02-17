@@ -8,6 +8,9 @@ var radius: float
 onready var node_sprite := $Sprite
 onready var mat_sprite := node_sprite.material as ShaderMaterial
 
+func is_paused():
+	return false
+
 func _ready():
 	node = scene.instance()
 	node.position = Vector2(320, 320)

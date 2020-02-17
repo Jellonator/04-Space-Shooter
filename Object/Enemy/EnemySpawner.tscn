@@ -10,7 +10,9 @@ shader_param/radius = null
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
 
-[node name="Spawner" type="Node2D"]
+[node name="Spawner" type="Node2D" groups=[
+"enemy",
+]]
 script = ExtResource( 1 )
 
 [node name="Viewport" type="Viewport" parent="."]

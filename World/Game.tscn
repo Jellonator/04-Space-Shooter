@@ -1,23 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Object/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Util/BulletRenderer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Util/StarRenderer.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Object/Enemy/EyeEnemy.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Gui/GameConfig.tscn" type="PackedScene" id=5]
-[ext_resource path="res://World/Pause.gd" type="Script" id=6]
-[ext_resource path="res://World/EnemyLocator.gd" type="Script" id=7]
-[ext_resource path="res://Object/Enemy/SmallBoys/SmallboyCircle.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Object/Enemy/EnemySpawner.tscn" type="PackedScene" id=9]
-
-[sub_resource type="StyleBoxFlat" id=1]
-content_margin_left = 8.0
-content_margin_right = 8.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-bg_color = Color( 0.0705882, 0.0705882, 0.0705882, 0.929412 )
+[ext_resource path="res://World/Game.gd" type="Script" id=4]
 
 [node name="Game" type="Node2D"]
+script = ExtResource( 4 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 286.999, 188.815 )
@@ -25,66 +14,3 @@ position = Vector2( 286.999, 188.815 )
 [node name="BulletRenderer" parent="." instance=ExtResource( 2 )]
 
 [node name="StarRenderer" parent="." instance=ExtResource( 3 )]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-pause_mode = 2
-
-[node name="Pause" type="Control" parent="CanvasLayer"]
-pause_mode = 2
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Margin" type="CenterContainer" parent="CanvasLayer/Pause"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Panel" type="PanelContainer" parent="CanvasLayer/Pause/Margin"]
-margin_left = 320.0
-margin_top = 110.0
-margin_right = 640.0
-margin_bottom = 430.0
-rect_min_size = Vector2( 320, 320 )
-custom_styles/panel = SubResource( 1 )
-
-[node name="VBox" type="VBoxContainer" parent="CanvasLayer/Pause/Margin/Panel"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 312.0
-margin_bottom = 312.0
-
-[node name="GameConfig" parent="CanvasLayer/Pause/Margin/Panel/VBox" instance=ExtResource( 5 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 304.0
-margin_bottom = 280.0
-size_flags_vertical = 3
-
-[node name="Center" type="CenterContainer" parent="CanvasLayer/Pause/Margin/Panel/VBox"]
-margin_top = 284.0
-margin_right = 304.0
-margin_bottom = 304.0
-
-[node name="Unpause" type="Button" parent="CanvasLayer/Pause/Margin/Panel/VBox/Center"]
-margin_left = 118.0
-margin_right = 186.0
-margin_bottom = 20.0
-text = "Unpause"
-
-[node name="EnemyLocator" type="Node2D" parent="CanvasLayer"]
-script = ExtResource( 7 )
-
-[node name="Spawner" parent="." instance=ExtResource( 9 )]
-scene = ExtResource( 4 )
-
-[node name="Spawner2" parent="." instance=ExtResource( 9 )]
-position = Vector2( 423.159, 217.895 )
-scene = ExtResource( 8 )
-[connection signal="pressed" from="CanvasLayer/Pause/Margin/Panel/VBox/Center/Unpause" to="CanvasLayer/Pause" method="_on_Unpause_pressed"]

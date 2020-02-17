@@ -15,7 +15,16 @@ var mod_timer := 0.0
 var death_timer := 1.0
 var smat: ShaderMaterial
 var velocity := Vector2(0, 0)
-var paused := false
+var paused := false setget set_paused, get_paused
+
+func get_paused() -> bool:
+	return paused
+
+func set_paused(value: bool):
+	paused = value
+	for c in get_children():
+		if c is CollisionShape or c is CollisionPolygon2D:
+			c.disabled = value
 
 signal killed();
 
@@ -72,8 +81,9 @@ func _physics_process(delta):
 		velocity = move_and_slide(velocity)
 		for i in range(get_slide_count()):
 			var col := get_slide_collision(i)
-			if col.collider.has_method("do_damage"):
-				col.collider.do_damage(1, col.normal * -300)
+			if not col.collider.is_in_group("enemy"):
+				if col.collider.has_method("do_damage"):
+					col.collider.do_damage(1, col.normal * -300)
 		if velocity.length() > 1e-4:
 			velocity += -drag * velocity * velocity * delta * velocity.normalized()
 		else:
