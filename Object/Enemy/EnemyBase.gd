@@ -8,19 +8,27 @@ export(Array, NodePath) var sprites := [];
 export var drag := 0.1
 export var weight := 1.0
 export var score_value := 1000
+export var spawner_radius := 32.0
 
 var health := 1
 var mod_timer := 0.0
 var death_timer := 1.0
 var smat: ShaderMaterial
 var velocity := Vector2(0, 0)
+var paused := false
 
 signal killed();
+
+func get_spawner_radius() -> float:
+	return spawner_radius
 
 func _ready():
 	health = max_health
 	smat = ShaderMaterial.new()
 	smat.shader = shader
+
+func is_paused():
+	return health <= 0 or paused
 
 func is_dead():
 	return health <= 0
@@ -60,15 +68,16 @@ func _physics_process(delta):
 			queue_free()
 		else:
 			smat.set_shader_param("death", death_timer)
-	velocity = move_and_slide(velocity)
-	for i in range(get_slide_count()):
-		var col := get_slide_collision(i)
-		if col.collider.has_method("do_damage"):
-			col.collider.do_damage(1, col.normal * -300)
-	if velocity.length() > 1e-4:
-		velocity += -drag * velocity * velocity * delta * velocity.normalized()
-	else:
-		velocity = Vector2(0, 0)
+	if not is_paused():
+		velocity = move_and_slide(velocity)
+		for i in range(get_slide_count()):
+			var col := get_slide_collision(i)
+			if col.collider.has_method("do_damage"):
+				col.collider.do_damage(1, col.normal * -300)
+		if velocity.length() > 1e-4:
+			velocity += -drag * velocity * velocity * delta * velocity.normalized()
+		else:
+			velocity = Vector2(0, 0)
 
 func add_velocity(accel: Vector2):
 	velocity += accel

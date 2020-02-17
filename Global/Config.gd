@@ -33,10 +33,10 @@ const SECTION_KEY_ELEMENTS := {
 	"move_down": "Move Down",
 	"move_left": "Move Left",
 	"move_right": "Move Right",
-	"look_up": "Move Up",
-	"look_down": "Move Down",
-	"look_left": "Move Left",
-	"look_right": "Move Right",
+	"look_up": "Look Up",
+	"look_down": "Look Down",
+	"look_left": "Look Left",
+	"look_right": "Look Right",
 	"action_shoot_mouse": "Shoot",
 	"action_shoot_nonmouse": "Shoot",
 	"game_pause": "Pause"
@@ -119,8 +119,7 @@ func _ready():
 func _update_events():
 	for name in SECTION_KEY_ELEMENTS.keys():
 		var events = config.get_value(SECTION_KEYS, name);
-		InputMap.erase_action(name);
-		InputMap.add_action(name);
+		InputMap.action_erase_events(name)
 		if typeof(events) == TYPE_ARRAY:
 			for event in events:
 				InputMap.action_add_event(name, event);

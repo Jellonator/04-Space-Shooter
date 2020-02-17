@@ -19,7 +19,7 @@ func _ready():
 	shoot_time = rand_range(0.8, 1.2)
 
 func _physics_process(delta):
-	if is_dead():
+	if is_paused():
 		return
 	var player = GameUtil.get_nearest_player(global_position)
 	if player == null:

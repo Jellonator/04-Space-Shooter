@@ -8,6 +8,18 @@ const SPEED := 180.0
 const BOY_SPEED := SPEED
 export var num_boys := 3
 var velocity := Vector2(0, 0)
+var paused := false setget set_paused, get_paused
+
+func get_spawner_radius() -> float:
+	return 32.0
+
+func set_paused(value: bool):
+	paused = value
+	for boy in boys:
+		boy.paused = get_paused()
+
+func get_paused() -> bool:
+	return paused
 
 var boys := []
 var t := 0.0
@@ -15,15 +27,17 @@ var t := 0.0
 func _ready():
 	for i in range(num_boys):
 		var boy := scene_boy.instance()
-		get_tree().current_scene.call_deferred("add_child", boy)
+		add_child(boy)
 		boys.append(boy)
-		boy.position = self.global_position
+		boy.paused = paused
 		boy.connect("killed", self, "_on_boy_killed", [boy])
 
 func _physics_process(delta):
 	var n := boys.size()
 	if n == 0:
 		queue_free()
+		return
+	if paused:
 		return
 	var radius := n * RADIUS_SCALE + BASE_RADIUS
 	var p1 = Vector2(radius, 0)
@@ -41,10 +55,12 @@ func _physics_process(delta):
 	var player = GameUtil.get_nearest_player(global_position)
 	if player != null:
 		var diff = player.global_position - global_position
-		if diff.length() > radius:
-			self.position += diff.normalized() * delta * SPEED
-		else:
-			self.position -= diff.normalized() * delta * SPEED
+		var movement = diff.normalized() * delta * SPEED
+		if diff.length() < radius:
+			movement *= -1
+		self.position += movement
+		for boy in boys:
+			boy.position -= movement
 
 func _on_boy_killed(boy):
 	boys.erase(boy)
